@@ -7,7 +7,7 @@ defmodule SlingWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_sling_key",
-    signing_salt: "74VPSY+I"
+    signing_salt: "BWkabncA"
   ]
 
   socket "/socket", SlingWeb.UserSocket,

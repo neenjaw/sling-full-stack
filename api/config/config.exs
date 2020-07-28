@@ -8,15 +8,16 @@
 use Mix.Config
 
 config :sling,
-  ecto_repos: [Sling.Repo]
+  ecto_repos: [Sling.Repo],
+  generators: [binary_id: true]
 
 # Configures the endpoint
 config :sling, SlingWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "m1iFFFDPuRg+HgBwFB9MfKzyqqeSIg2FJdh+33nkr1+AWdIt/vue/gLbuUxvG9RB",
+  secret_key_base: "IM4B9zXYVefR+08LYIet6wnXZQqtkFHxNMJ7DAEJ7AT4KVfYNsz/HvhIuOf9MmPq",
   render_errors: [view: SlingWeb.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: Sling.PubSub,
-  live_view: [signing_salt: "H3f1r16o"]
+  live_view: [signing_salt: "B6bakbkH"]
 
 # Configures Elixir's Logger
 config :logger, :console,
