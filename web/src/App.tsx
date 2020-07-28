@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  // Link
+  Link
 } from 'react-router-dom'
 
 import './App.css';
@@ -23,6 +23,9 @@ const Home = () =>
   <div>Home</div>
 
 const NoMatch = () =>
-  <div>404</div>
+  <div style={{ margin: '2rem auto', textAlign: 'center' }}>
+    <p>Page not found</p>
+    <p><Link to="/">Go to the home page →</Link></p>
+  </div>;
 
 export default App;
