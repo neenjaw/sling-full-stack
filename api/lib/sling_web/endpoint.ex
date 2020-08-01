@@ -1,6 +1,24 @@
 defmodule SlingWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :sling
 
+  # use SiteEncrypt.Phoenix
+
+  # @impl SiteEncrypt
+  # def certification do
+  #   SiteEncrypt.configure(
+  #     client: :native,
+  #     domains: ["sling.neenjaw.com"],
+  #     emails: ["tim@neenjaw.com"],
+  #     db_folder: Application.app_dir(:sling, Path.join(~w/priv site_encrypt/)),
+  #     directory_url:
+  #       case System.get_env("MODE", "local") do
+  #         "local" -> {:internal, port: 4002}
+  #         "staging" -> "https://acme-staging-v02.api.letsencrypt.org/directory"
+  #         "production" -> "https://acme-v02.api.letsencrypt.org/directory"
+  #       end
+  #   )
+  # end
+
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.

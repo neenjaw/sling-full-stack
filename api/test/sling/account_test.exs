@@ -6,9 +6,26 @@ defmodule Sling.AccountTest do
   describe "users" do
     alias Sling.Account.User
 
-    @valid_attrs %{email: "some email", is_active: true, username: "some username", password: "some password"}
-    @update_attrs %{email: "some updated email", is_active: false, username: "some updated username", password: "some updated password"}
-    @invalid_attrs %{email: nil, is_active: nil, username: nil, password: nil}
+    @valid_attrs %{
+      email: "some email",
+      is_active: true,
+      username: "some username",
+      password: "some password"
+    }
+
+    @update_attrs %{
+      email: "some updated email",
+      is_active: false,
+      username: "some updated username",
+      password: "some updated password"
+    }
+
+    @invalid_attrs %{
+      email: nil,
+      is_active: nil,
+      username: nil,
+      password: nil
+    }
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -38,6 +55,7 @@ defmodule Sling.AccountTest do
       assert user.email == "some email"
       assert user.is_active == true
       assert user.username == "some username"
+      assert Bcrypt.verify_pass("some password", user.password_hash)
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -50,6 +68,7 @@ defmodule Sling.AccountTest do
       assert user.email == "some updated email"
       assert user.is_active == false
       assert user.username == "some updated username"
+      assert Bcrypt.verify_pass("some updated password", user.password_hash)
     end
 
     test "update_user/2 with invalid data returns error changeset" do
@@ -67,6 +86,14 @@ defmodule Sling.AccountTest do
     test "change_user/1 returns a user changeset" do
       user = user_fixture()
       assert %Ecto.Changeset{} = Account.change_user(user)
+    end
+
+    test "authenticate_user/2 authenticates the user" do
+      user = user_without_password()
+
+      assert {:error, "Wrong email or password"} = Account.authenticate_user("wrong email", "")
+      assert {:ok, authenticated_user} = Account.authenticate_user(user.email, @valid_attrs.password)
+      assert user == authenticated_user
     end
   end
 end

@@ -28,7 +28,8 @@ defmodule Sling.Account.User do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset ->
         change(changeset, Bcrypt.add_hash(password))
-      _ -> changeset
+      _ ->
+        changeset
     end
   end
 end
