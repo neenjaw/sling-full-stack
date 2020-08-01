@@ -9,9 +9,14 @@ import { PhoenixSocketProvider } from "./phoenix/PhoenixSocketContext";
 
 import './App.css';
 
+// eslint-disable-next-line
+const jsonEndpoint = process.env.PHOENIX_JSON_ENDPOINT || 'http://localhost:3000'
+// eslint-disable-next-line
+const wsEndpoint = process.env.PHOENIX_WS_ENDPOINT || 'ws://localhost:3000'
+
 function App() {
   return (
-    <PhoenixSocketProvider endpoint='/socket'>
+    <PhoenixSocketProvider endpoint={wsEndpoint}>
       <Router>
         <Switch>
           <Route exact path="/"><Home /></Route>
