@@ -65,6 +65,13 @@ defmodule SlingWeb.Endpoint do
 
   plug Plug.MethodOverride
   plug Plug.Head
+
+  plug Corsica,
+    max_age: 600,
+    allow_credentials: true,
+    origins: ~r{^https?://localhost:3000$},
+    allow_headers: :all
+
   plug Plug.Session, @session_options
   plug SlingWeb.Router
 end
