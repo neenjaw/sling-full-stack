@@ -59,4 +59,10 @@ defmodule SlingWeb.UserController do
         |> render("401.json", message: message)
     end
   end
+
+  def sign_out(conn, _params) do
+    conn
+    |> delete_session(:current_user_id)
+    |> render("sign_out.json")
+  end
 end

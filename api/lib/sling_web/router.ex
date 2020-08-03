@@ -13,6 +13,7 @@ defmodule SlingWeb.Router do
   scope "/api", SlingWeb do
     pipe_through :api
     post "/users/sign_in", UserController, :sign_in
+    post "/users/sign_out", UserController, :sign_out
   end
 
   scope "/api", SlingWeb do
