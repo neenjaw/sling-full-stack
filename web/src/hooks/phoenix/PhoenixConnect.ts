@@ -3,7 +3,7 @@ import {
   SLING_ENDPOINT_URL,
   SLING_SIGN_IN_PATH,
   AXIOS_OPTIONS,
-} from "../constants";
+} from "../../constants";
 
 export function connect(email: string, password: string) {
   return axios.post(

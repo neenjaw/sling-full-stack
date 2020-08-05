@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "../phoenix-auth/PhoenixConnect";
-import { setSessionAuth, AuthState } from "../phoenix-auth/PhoenixAuth";
+import { useIsMounted } from "use-is-mounted";
+import { setSessionAuth, AuthState } from "../hooks/phoenix/PhoenixAuth";
+import { connect } from "../hooks/phoenix/PhoenixConnect";
 
 export const Login = () => {
+  const isMounted = useIsMounted();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -25,6 +27,10 @@ export const Login = () => {
     setLoading(true);
     connect(email, password)
       .then((res) => {
+        if (!isMounted.current) {
+          return;
+        }
+
         console.log(res);
         if (
           res.status === 200 &&
@@ -39,6 +45,10 @@ export const Login = () => {
         }
       })
       .catch((err) => {
+        if (!isMounted.current) {
+          return;
+        }
+
         setLoading(false);
         setHelperText("Incorrect email or password");
       });
@@ -72,7 +82,7 @@ export const Login = () => {
         <button
           type="submit"
           onClick={handleLogin}
-          disabled={isButtonDisabled}
+          disabled={isButtonDisabled || loading}
           value="Login"
         >
           {loading ? "Loading..." : "Sign in"}

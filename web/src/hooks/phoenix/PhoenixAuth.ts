@@ -1,5 +1,4 @@
 import { useState, useLayoutEffect, useCallback } from "react";
-
 export enum AuthState {
   Guest = "GUEST",
   User = "USER",

@@ -1,12 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { PhoenixSocketProvider } from "./phoenix-channel/PhoenixSocketContext";
+import { PhoenixSocketProvider } from "./hooks/phoenix/PhoenixSocketContext";
 
 import { SLING_SOCKET_URL } from "./constants";
 
 import "./App.css";
 import { Login } from "./components/Login";
-import { useIsLoggedIn } from "./phoenix-auth/PhoenixAuth";
+import { useIsLoggedIn } from "./hooks/phoenix/PhoenixAuth";
 
 function App() {
   const isLoggedIn = useIsLoggedIn();
