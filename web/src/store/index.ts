@@ -4,7 +4,7 @@ import reducers from '../reducers'
 
 const middleware = [thunk]
 
-const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
+const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore)
 
 const store = createStoreWithMiddleware(reducers)
 

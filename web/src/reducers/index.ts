@@ -6,7 +6,7 @@ interface SlingState {
 }
 
 export enum SlingActionKeys {
-  LOGOUT = 'LOGOUT'
+  LOGOUT = 'LOGOUT',
 }
 
 interface LogoutAction {
@@ -19,7 +19,10 @@ const appReducer = combineReducers({
   form: reducerForm,
 })
 
-export default (state: CombinedState<SlingState> | undefined, action: SlingActionTypes) => {
+export default (
+  state: CombinedState<SlingState> | undefined,
+  action: SlingActionTypes
+) => {
   if (action.type === SlingActionKeys.LOGOUT) {
     return appReducer(undefined, action)
   }
