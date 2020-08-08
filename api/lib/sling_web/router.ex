@@ -12,13 +12,20 @@ defmodule SlingWeb.Router do
 
   scope "/api", SlingWeb do
     pipe_through :api
-    post "/users/sign_in", UserController, :sign_in
-    post "/users/sign_out", UserController, :sign_out
+    post "/sign_in", UserController, :sign_in
+    post "/sign_out", UserController, :sign_out
   end
 
   scope "/api", SlingWeb do
     pipe_through [:api, :api_auth]
+
+    # Users
     resources "/users", UserController, except: [:edit, :new]
+    get "/users/:id/rooms", UserController, :rooms
+
+    # Rooms
+    resources "/rooms", RoomController, only: [:index, :create]
+    post "/rooms/:id/join", RoomController, :join
   end
 
   # Enables LiveDashboard only for development

@@ -10,6 +10,7 @@ defmodule Sling.Account.User do
     field :is_active, :boolean, default: false
     field :password, :string, virtual: true
     field :password_hash, :string
+    many_to_many :rooms, Sling.Chat.Room, join_through: "user_rooms"
 
     timestamps(type: :utc_datetime_usec)
   end
@@ -28,6 +29,7 @@ defmodule Sling.Account.User do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset ->
         change(changeset, Bcrypt.add_hash(password))
+
       _ ->
         changeset
     end

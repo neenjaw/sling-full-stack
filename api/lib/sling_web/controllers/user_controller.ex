@@ -4,6 +4,8 @@ defmodule SlingWeb.UserController do
   alias Sling.Account
   alias Sling.Account.User
 
+  import SlingWeb.UserSessionController, only: [login_user: 2, logout: 1]
+
   action_fallback SlingWeb.FallbackController
 
   def index(conn, _params) do
@@ -15,7 +17,6 @@ defmodule SlingWeb.UserController do
     with {:ok, %User{} = user} <- Account.create_user(user_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.user_path(conn, :show, user))
       |> render("show.json", user: user)
     end
   end
@@ -45,7 +46,7 @@ defmodule SlingWeb.UserController do
     case Sling.Account.authenticate_user(email, password) do
       {:ok, user} ->
         conn
-        |> put_session(:current_user_id, user.id)
+        |> login_user(user)
         |> configure_session(renew: true)
         |> put_status(:ok)
         |> put_view(SlingWeb.UserView)
@@ -54,6 +55,7 @@ defmodule SlingWeb.UserController do
       {:error, message} ->
         conn
         |> delete_session(:current_user_id)
+        |> assign(:current_user, nil)
         |> put_status(:unauthorized)
         |> put_view(SlingWeb.ErrorView)
         |> render("401.json", message: message)
@@ -62,7 +64,7 @@ defmodule SlingWeb.UserController do
 
   def sign_out(conn, _params) do
     conn
-    |> delete_session(:current_user_id)
+    |> logout()
     |> render("sign_out.json")
   end
 end
