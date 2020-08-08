@@ -14,13 +14,30 @@ defmodule SlingWeb.RoomController do
 
   def create(conn, %{"room" => room_params}) do
     current_user_id = get_session(conn, :current_user_id)
+    room_params |> IO.inspect(label: "17")
 
-    with {:ok, %Room{} = room} <- Chat.create_room(room_params),
+    room_params =
+      Map.put(room_params, "created_by_user_id", current_user_id) |> IO.inspect(label: "18")
+
+    with {:room, {:ok, %Room{} = room}} <- {:room, Chat.create_room(room_params)},
          user_room_attrs <- %{user_id: current_user_id, room_id: room.id},
          {:ok, %UserRoom{}} <- Chat.create_user_room(user_room_attrs) do
       conn
       |> put_status(:created)
       |> render("show_join.json", room: room)
+    else
+      {:room, {:error, changeset}} ->
+        errors =
+          changeset
+          |> Ecto.Changeset.traverse_errors(fn {msg, opts} ->
+            Enum.reduce(opts, msg, fn {key, value}, acc ->
+              String.replace(acc, "%{#{key}}", to_string(value))
+            end)
+          end)
+
+        conn
+        |> put_status(:bad_request)
+        |> render("error.json", errors: %{room: errors})
     end
   end
 
