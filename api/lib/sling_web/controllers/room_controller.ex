@@ -14,10 +14,7 @@ defmodule SlingWeb.RoomController do
 
   def create(conn, %{"room" => room_params}) do
     current_user_id = get_session(conn, :current_user_id)
-    room_params |> IO.inspect(label: "17")
-
-    room_params =
-      Map.put(room_params, "created_by_user_id", current_user_id) |> IO.inspect(label: "18")
+    room_params = Map.put(room_params, "created_by_user_id", current_user_id)
 
     with {:room, {:ok, %Room{} = room}} <- {:room, Chat.create_room(room_params)},
          user_room_attrs <- %{user_id: current_user_id, room_id: room.id},
@@ -41,24 +38,46 @@ defmodule SlingWeb.RoomController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    room = Chat.get_room!(id)
-    render(conn, "show.json", room: room)
-  end
+  def join(conn, %{"id" => room_id}) do
+    current_user_id = get_session(conn, :current_user_id)
 
-  def update(conn, %{"id" => id, "room" => room_params}) do
-    room = Chat.get_room!(id)
+    case Sling.Repo.get(Room, room_id) do
+      nil ->
+        conn
+        |> put_status(:bad_request)
+        |> render("error.json", errors: %{room: %{id: "does not exist"}})
 
-    with {:ok, %Room{} = room} <- Chat.update_room(room, room_params) do
-      render(conn, "show.json", room: room)
+      room ->
+        with user_room_attrs <- %{user_id: current_user_id, room_id: room.id},
+             {:ok, %UserRoom{}} <- Chat.create_user_room(user_room_attrs) do
+          conn
+          |> put_status(:accepted)
+          |> render("show_join.json", room: room)
+        end
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    room = Chat.get_room!(id)
+  # def show(conn, %{"id" => id}) do
+  #   room = Chat.get_room!(id)
+  #   render(conn, "show.json", room: room)
+  # end
 
-    with {:ok, %Room{}} <- Chat.delete_room(room) do
-      send_resp(conn, :no_content, "")
-    end
-  end
+  # def update(conn, %{"id" => id, "room" => room_params}) do
+  #   room = Chat.get_room!(id)
+
+  #   with {:ok, %Room{} = room} <- Chat.update_room(room, room_params) do
+  #     render(conn, "show.json", room: room)
+  #   end
+  # end
+
+  ##
+  # When implemented, a check should be done so to prevent any user from deleting any channel
+  #
+  # def delete(conn, %{"id" => id}) do
+  #   room = Chat.get_room!(id)
+
+  #   with {:ok, %Room{}} <- Chat.delete_room(room) do
+  #     send_resp(conn, :no_content, "")
+  #   end
+  # end
 end
