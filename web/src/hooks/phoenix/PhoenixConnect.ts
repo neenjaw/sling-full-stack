@@ -15,3 +15,10 @@ export function connect(email: string, password: string, opts: {} = {}) {
     Object.assign({}, AXIOS_OPTIONS, opts)
   )
 }
+
+export function get(path: string, opts: {} = {}) {
+  return axios.get(
+    `${SLING_ENDPOINT_URL}${path}`,
+    Object.assign({}, AXIOS_OPTIONS, opts)
+  )
+}
