@@ -13,7 +13,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.9",
     "axios": "^0.19.2",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "md5": "^2.2.1",
     "moment": "^2.27.0",
     "phoenix": "^1.5.4",
